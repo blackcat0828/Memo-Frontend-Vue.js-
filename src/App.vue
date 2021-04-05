@@ -1,7 +1,18 @@
 <template>
   <div id="app">
-    <!-- 이름이 없는 router-view 컴포넌트는 자동으로 default라는 이름을 부여받는다. -->
-    <router-view/>
+    <b-container fluid="sm">
+      <b-row>
+        <b-col><router-view name="header"/></b-col>
+      </b-row>
+
+      <b-row align-v="stretch">
+        <b-col id="category" cols="3"><router-view name="category"/></b-col>
+        <b-col><router-view/></b-col>
+      </b-row>
+
+
+
+    </b-container>
   </div>
 </template>
 
@@ -12,6 +23,21 @@ export default {
 </script>
 
 <style>
+    .row { margin-bottom: 10px;}
+    /* [class|="col"] {
+      background: #2db34a;
+      border: 1px solid #eaeaed;
+      height: px;
+      font-size: .8em;
+      line-height: 50px;
+      text-align: center;
+      color: white;
+      font-weight: 700;
+    } */
+
+  a:link { color: black; text-decoration: none;}
+  a:visited { color: black; text-decoration: none;}
+  a:hover { color: black; text-decoration: none;}
 
 
 </style>

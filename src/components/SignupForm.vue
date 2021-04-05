@@ -4,15 +4,52 @@
     HTML5의 유효성 검사는 브라우저마다 동작이 동일되지 않기 때문에 우리는 직접 유효성 검사를
     진행할 것이다.
    -->
-  <form @submit.prevent="submit" novalidate>
-    <fieldset>
-      <input type="text" v-model="name" placeholder="이름을 입력해 주세요" />
-      <input type="email" v-model="email" placeholder="이메일을 입력해 주세요" />
-      <input type="password" v-model="password" placeholder="비밀번호를 입력해 주세요" />
-      <input type="password" v-model="passwordConfirm" placeholder="비밀번호를 다시 한번 입력해주세요." />
-      <button type="submit">회원가입</button>
-    </fieldset>
-  </form>
+  <b-form @submit.prevent="submit" novalidate>
+      <b-form-group
+        id="name-group"
+        lable="이름:"
+        label-for="name"
+      >
+
+        <b-form-input type="text" v-model="name" id="name"
+         placeholder="이름을 입력해주세요." >
+        </b-form-input>
+      </b-form-group>
+
+      <b-form-group
+        id="email-group"
+        lable="이메일:"
+        label-for="email"
+      >
+
+        <b-form-input type="email" v-model="email" id="email"
+        placeholder="이메일을 입력해주세요." >
+        </b-form-input>
+      </b-form-group>
+
+      <b-form-group
+        id="password-group"
+        lable="비밀번호:"
+        label-for="password"
+      >
+        <b-form-input type="password" v-model="password" id="password"
+        placeholder="비밀번호를 입력해주세요">
+        </b-form-input>
+      </b-form-group>
+
+      <b-form-group
+        id="passwordConfirm-group"
+        lable="비밀번호 확인:"
+        label-for="passwordConfirm"
+      >
+        <b-form-input type="password" v-model="passwordConfirm" id="passwordConfirm"
+        placeholder="비밀번호를 다시 입력해주세요">
+        </b-form-input>
+      </b-form-group>
+
+      <b-button type="submit" variant="outline-primary">가입</b-button>
+
+  </b-form>
 </template>
 
 

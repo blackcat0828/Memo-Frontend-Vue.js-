@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Signup from '@/pages/Signup'
 import Signin from '@/pages/Signin'
+import AppHeader from '@/components/AppHeader'
 
 Vue.use(Router)
 
@@ -12,7 +13,7 @@ export default new Router({
       path: '/signup',
       name: 'Signup',
       components: {
-
+        header: AppHeader,
         default: Signup
       }
     },
@@ -21,7 +22,7 @@ export default new Router({
       name: 'Signin',
       // components 속성이 아닌 component를 사용하면 자동으로 이름이 없는 router-view에만 컴포넌트를 랜더한다.
       components: {
-
+        header: AppHeader,
         default: Signin
       }
 

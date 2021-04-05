@@ -28,15 +28,16 @@ export default {
       })
 
   },
-  // signinByToken ({commit}, token){
-  //   // 1. 토큰을 스토어에 커밋한다.
-  //   commit(SET_ACCESS_TOKEN, token)
-  //   // 2. 사용자의 정보를 받아온 후 스토어에 커밋한다.
-  //   return api.get('/users/me')
-  //         .then(res => {
-  //           commit(SET_MY_INFO, res.data)
-  //         })
-  // },
+  signinByToken ({commit}, token){
+    // 1. 토큰을 스토어에 커밋한다.
+    commit(SET_ACCESS_TOKEN, token)
+    // 2. 사용자의 정보를 받아온 후 스토어에 커밋한다.
+    return api.get('/users/me')
+          .then(res => {
+            alert(res.data.name);
+            commit(SET_MY_INFO, res.data)
+          })
+  },
   signout ({commit}){
     commit(DESTROY_MY_INFO)
     commit(DESTROY_ACCESS_TOKEN)
