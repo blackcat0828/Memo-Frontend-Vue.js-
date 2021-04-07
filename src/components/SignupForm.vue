@@ -7,7 +7,7 @@
   <b-form @submit.prevent="submit" novalidate>
       <b-form-group
         id="name-group"
-        lable="이름:"
+        label="이름:"
         label-for="name"
       >
 
@@ -18,7 +18,7 @@
 
       <b-form-group
         id="email-group"
-        lable="이메일:"
+        label="이메일:"
         label-for="email"
       >
 
@@ -29,7 +29,7 @@
 
       <b-form-group
         id="password-group"
-        lable="비밀번호:"
+        label="비밀번호:"
         label-for="password"
       >
         <b-form-input type="password" v-model="password" id="password"
@@ -39,7 +39,7 @@
 
       <b-form-group
         id="passwordConfirm-group"
-        lable="비밀번호 확인:"
+        label="비밀번호 확인:"
         label-for="passwordConfirm"
       >
         <b-form-input type="password" v-model="passwordConfirm" id="passwordConfirm"

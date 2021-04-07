@@ -6,7 +6,8 @@
       </b-row>
 
       <b-row align-v="stretch">
-        <b-col id="category" cols="3"><router-view name="category"/></b-col>
+        <b-col id="boards" cols="3"><router-view name="boards"/></b-col>
+        <router-view name="auth" />
         <b-col><router-view/></b-col>
       </b-row>
 

@@ -1,9 +1,11 @@
 <template>
-  <div class="sign-in-page">
-    <h3>로그인</h3>
-    <signin-form @submit="onSubmit" />
-    <p>회원이 아니신가요? <router-link :to="{ name: 'Signup'}">회원가입하러 가기</router-link></p>
-  </div>
+  <b-col cols="6">
+    <div class="sign-in-page">
+      <h3>로그인</h3>
+      <signin-form @submit="onSubmit" />
+      <p>회원이 아니신가요? <router-link :to="{ name: 'Signup'}">회원가입하러 가기</router-link></p>
+    </div>
+  </b-col>
 </template>
 
 <script>

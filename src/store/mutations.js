@@ -4,6 +4,7 @@ import {
   SET_MY_INFO,
   DESTROY_ACCESS_TOKEN,
   DESTROY_MY_INFO,
+  SET_PERSONALBOARD_INFO
 
 } from './mutations-types'
 import api from '@/api'
@@ -30,6 +31,11 @@ export default {
   [SET_MY_INFO] (state, me){
     if(me){
       state.me = me
+    }
+  },
+  [SET_PERSONALBOARD_INFO] (state, personalBoardInfo){
+    if(me){
+      state.personalBoards = personalBoardInfo
     }
   },
   [DESTROY_ACCESS_TOKEN] (state) {

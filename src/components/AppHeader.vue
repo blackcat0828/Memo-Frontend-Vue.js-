@@ -50,21 +50,13 @@ import {mapGetters, mapState, mapActions} from 'vuex'
 
 export default {
   name: 'AppHeader',
-  data () {
-    return {
-      isActive: false
-    }
-  },
   computed: {
     // isAuthorized 게터를 등록한다.
     ...mapGetters(['isAuthorized']),
     ...mapState(['me'])
   },
   methods: {
-    // toggle () {
-    //   //toggle 메소드가 호출되면 isActive의 값은 true라면 false로, false라면 true로 반전된다.
-    //   this.isActive = !this.isActive
-    // },
+
     onClickSignout(){
       this.signout()
       //this.$router.go({name: 'PostListPage'})

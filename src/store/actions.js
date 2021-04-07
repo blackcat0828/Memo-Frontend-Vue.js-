@@ -1,4 +1,5 @@
 import api from '@/api'
+import store from '@/store'
 import {
   SET_ACCESS_TOKEN,
   SET_MY_INFO,
@@ -25,6 +26,11 @@ export default {
         //사용자 정보 요청이 성공했다면 변이를 사용하여 스토어에 사용자 정보를 저장한다.
         alert(res.data.email)
         commit(SET_MY_INFO, res.data)
+        return api.get('/boards', {owner: store.state.me.email})
+      })
+      .then(res=>{
+        alert("보드 카테고리 가져옴")
+        commit(SET_PERSONALBOARD_INFO, res.data)
       })
 
   },
@@ -34,8 +40,15 @@ export default {
     // 2. 사용자의 정보를 받아온 후 스토어에 커밋한다.
     return api.get('/users/me')
           .then(res => {
-            alert(res.data.name);
             commit(SET_MY_INFO, res.data)
+
+            const owner = store.state.me.email;
+            alert(owner)
+            return api.get('/boards', this.owner)
+          })
+          .then(res=>{
+            alert("보드 카테고리 가져옴")
+            commit(SET_PERSONALBOARD_INFO, res.data)
           })
   },
   signout ({commit}){

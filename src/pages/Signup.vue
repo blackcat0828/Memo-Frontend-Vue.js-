@@ -1,9 +1,11 @@
 <template>
+<b-col cols="6">
   <div class="sign-up-page">
     <h3>회원 가입</h3>
     <signup-form @submit="onSubmit"/>
     <p>이미 가입하셨나요? <router-link :to="{ name: 'Signin'}">로그인하러 가기</router-link></p>
   </div>
+</b-col>
 </template>
 
 <script>

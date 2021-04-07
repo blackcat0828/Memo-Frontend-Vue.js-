@@ -1,5 +1,7 @@
 export default {
   boards: [],
+  personalBoards:[],
+  teamBoards:[],
   memos: [],
   memo: null,
   //토큰 방식의 인증을 사용하는 경우 보안상의 이유로 엑세스 토큰, 리프레쉬 토큰 두 가지 종류의 토큰을 발급한다.
