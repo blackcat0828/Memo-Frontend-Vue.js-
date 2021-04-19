@@ -5,55 +5,92 @@ import {
   SET_MY_INFO,
   DESTROY_ACCESS_TOKEN,
   DESTROY_MY_INFO,
+  SET_PERSONALBOARD_INFO,
+  DESTROY_PERSONALBOARDS,
+  DESTROY_MEMOS,
+  ADD_PERSONALBOARD,
+  UPDATE_PERSONALBOARD,
+  DELETE_PERSONALBOARD,
+  SET_PERSONALMEMOS,
+  SET_SELECTEDBOARD_ID,
+  SET_MEMO
 } from './mutations-types'
 
 export default {
-  signin ({ commit }, payload){
+  async signin ({ commit }, payload){
     const {email, password} = payload
-    api.post(`/auth/signin?email=${email}&&password=${password}`)
-      .then(res => {
-
-        const {Authorization} = res.data
-        Authorization.trim();
-        alert(Authorization)
-
-        commit(SET_ACCESS_TOKEN, Authorization)
-
-        //토큰을 스토어에 저장하면 api 모듈의 headers에 토큰이 저장되므로 바로 사용자 정보를 불러올 수 있다.
-        return api.get('/users/me')
-      })
-      .then(res=> {
-        //사용자 정보 요청이 성공했다면 변이를 사용하여 스토어에 사용자 정보를 저장한다.
-        alert(res.data.email)
-        commit(SET_MY_INFO, res.data)
-        return api.get('/boards', {owner: store.state.me.email})
-      })
-      .then(res=>{
-        alert("보드 카테고리 가져옴")
-        commit(SET_PERSONALBOARD_INFO, res.data)
-      })
-
+    const result = await api.post(`/auth/signin?email=${email}&&password=${password}`)
+    const {Authorization} = result.data
+    await commit(SET_ACCESS_TOKEN, Authorization)
+    const myInfo = await api.get('/users/me')
+    await commit(SET_MY_INFO, myInfo.data)
+    const personalBoard = await api.get(`/boards/personal?email=${myInfo.data.email}`)
+    await commit(SET_PERSONALBOARD_INFO, personalBoard.data)
   },
-  signinByToken ({commit}, token){
+  async signinByToken ({commit}, token){
     // 1. 토큰을 스토어에 커밋한다.
-    commit(SET_ACCESS_TOKEN, token)
+    await commit(SET_ACCESS_TOKEN, token)
     // 2. 사용자의 정보를 받아온 후 스토어에 커밋한다.
-    return api.get('/users/me')
-          .then(res => {
-            commit(SET_MY_INFO, res.data)
-
-            const owner = store.state.me.email;
-            alert(owner)
-            return api.get('/boards', this.owner)
-          })
-          .then(res=>{
-            alert("보드 카테고리 가져옴")
-            commit(SET_PERSONALBOARD_INFO, res.data)
-          })
+    const myInfo = await api.get('/users/me')
+    await commit(SET_MY_INFO, myInfo.data)
+    const personalBoard = await api.get(`/boards/personal?email=${myInfo.data.email}`)
+    await commit(SET_PERSONALBOARD_INFO, personalBoard.data)
   },
   signout ({commit}){
     commit(DESTROY_MY_INFO)
     commit(DESTROY_ACCESS_TOKEN)
-  }
+    commit(DESTROY_PERSONALBOARDS)
+    commit(DESTROY_MEMOS)
+  },
+  async addPersonalBoard({commit}, payload){
+    const result = await api.post('/boards/personal', payload)
+
+    if(result.status === 201){
+        payload.pboardid = result.data.pboardid;
+        await commit(ADD_PERSONALBOARD, payload)
+    }
+  },
+  async updateBoardTitle({commit}, payload){
+    const {pboardid, title} = payload
+    const result = await api.put(`/boards/personal/${pboardid}`, {title})
+    if(result.status === 200){
+        await commit(UPDATE_PERSONALBOARD, payload)
+    }
+  },
+  async deleteBoardAction({commit}, pboardid){
+      const result = await api.delete(`/boards/personal/${pboardid}`)
+      if(result.status === 200){
+        commit(DELETE_PERSONALBOARD, pboardid)
+      }
+  },
+  async getMemoLists ({commit}, pboardid){
+    await commit(DESTROY_MEMOS)
+    const result = await api.get(`/boards/personal/${pboardid}`)
+    await commit(SET_PERSONALMEMOS, result.data)
+  },
+  setSelectedBoardId ({commit}, boardId){
+    commit(SET_SELECTEDBOARD_ID, boardId)
+  },
+  async addPersonalMemo({commit}, payload){
+    const{title, contents, pboardid} = payload
+    await api.post(`/boards/personal/${pboardid}/memos`, {title, contents})
+
+  },
+  setMemo ({commit}, memoId){
+    commit(SET_MEMO, memoId)
+  },
+  async getMemo({commit}, payload){
+    const {pboardid, memoId} = payload
+    const result = await api.get(`/boards/personal/${pboardid}/memos/${memoId}`)
+    await commit(SET_MEMO, result.data)
+  },
+  async updatePersonalMemo({commit}, payload){
+    const {memoId, pboardid, title, contents} = payload
+    await api.put(`/boards/personal/${pboardid}/memos/${memoId}`, {title, contents})
+  },
+  async deletePersonalMemo({commit}, payload){
+    const {pboardid, memoId} = payload
+    const result = await api.delete(`/boards/personal/${pboardid}/memos/${memoId}`)
+},
 
 }

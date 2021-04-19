@@ -1,18 +1,17 @@
 <template>
   <div id="app">
-    <b-container fluid="sm">
-      <b-row>
-        <b-col><router-view name="header"/></b-col>
-      </b-row>
-
-      <b-row align-v="stretch">
-        <b-col id="boards" cols="3"><router-view name="boards"/></b-col>
+    <b-container fluid="sm" class="container">
+   
+      <router-view name="header"/>
+    
+    <div id="main">
+      <b-row class="side" >
+        <b-col id="boards" cols="3"><router-view name="boards" /></b-col>
         <router-view name="auth" />
-        <b-col><router-view/></b-col>
+        <b-col cols="9"><router-view name="Memos" :key="$route.fullPath" /></b-col>
       </b-row>
-
-
-
+    </div>
+    
     </b-container>
   </div>
 </template>
@@ -39,6 +38,14 @@ export default {
   a:link { color: black; text-decoration: none;}
   a:visited { color: black; text-decoration: none;}
   a:hover { color: black; text-decoration: none;}
+  body {
+   
+  }
+  
+
+  #app {
+    height: 95%;
+  }
 
 
 </style>

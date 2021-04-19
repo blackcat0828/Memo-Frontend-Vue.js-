@@ -4,7 +4,15 @@ import {
   SET_MY_INFO,
   DESTROY_ACCESS_TOKEN,
   DESTROY_MY_INFO,
-  SET_PERSONALBOARD_INFO
+  SET_PERSONALBOARD_INFO,
+  DESTROY_PERSONALBOARDS,
+  DESTROY_MEMOS,
+  ADD_PERSONALBOARD,
+  UPDATE_PERSONALBOARD,
+  DELETE_PERSONALBOARD,
+  SET_PERSONALMEMOS,
+  SET_SELECTEDBOARD_ID,
+  SET_MEMO
 
 } from './mutations-types'
 import api from '@/api'
@@ -34,9 +42,26 @@ export default {
     }
   },
   [SET_PERSONALBOARD_INFO] (state, personalBoardInfo){
-    if(me){
+    if(personalBoardInfo){
       state.personalBoards = personalBoardInfo
     }
+  },
+  [ADD_PERSONALBOARD] (state, personalBoard){
+    if(personalBoard){
+      state.personalBoards.push(personalBoard)
+    }
+  },
+  [UPDATE_PERSONALBOARD] (state, personalBoard){
+    const {pboardid, title} = personalBoard;
+    const targetIndex = state.personalBoards.findIndex(v => v.pboardid === pboardid);
+    const targetBoard = state.personalBoards[targetIndex];
+    //targetBoard.title = title;
+    //객체 내부에 key 중복선언시 나중에 선언한 key가 기존 key값을 덮어씀
+    state.personalBoards.splice(targetIndex, 1, {...targetBoard, title})
+  },
+  [DELETE_PERSONALBOARD] (state, pboardid){ 
+      const targetIndex = state.personalBoards.findIndex(v => v.pboardid === pboardid);
+      state.personalBoards.splice(targetIndex, 1);
   },
   [DESTROY_ACCESS_TOKEN] (state) {
     state.accessToken=''
@@ -45,5 +70,24 @@ export default {
   },
   [DESTROY_MY_INFO] (state) {
     state.me = null
+  },
+  [DESTROY_PERSONALBOARDS] (state) {
+    state.personalBoards = []
+  },
+  [DESTROY_MEMOS] (state) {
+    state.memos = []
+  },
+  [SET_PERSONALMEMOS] (state, personalMemos){
+    if(personalMemos){
+      state.memos = personalMemos;
+    }
+  },
+  [SET_SELECTEDBOARD_ID] (state, boardId){
+    
+      state.selectedBoardId = boardId;
+    
+  },
+  [SET_MEMO] (state, memo){
+    state.memo = memo;
   },
 }

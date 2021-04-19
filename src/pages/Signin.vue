@@ -10,23 +10,23 @@
 
 <script>
 import SigninForm from '@/components/SigninForm'
-import { mapActions} from 'vuex'
+import { mapActions, mapState} from 'vuex'
 
 export default {
   name: 'Signin',
   components: {SigninForm},
+  computed: {
+    ...mapState(['me']),
+  },
   methods: {
-    onSubmit(payload){
-      this.signin(payload)
-          .then(res => {
-            alert('로그인이 완료되었습니다.')
-            this.$router.push({ name: 'PostListPage'})
-          })
-          .catch(err => {
-            alert(err.response.data.msg)
-          })
+    async onSubmit(payload){
+     await this.signin(payload)
+          
+    this.$router.push({ name: 'home'})
+  
+
     },
-    ...mapActions([ 'signin' ])
+    ...mapActions([ 'signin','getPersonalBoardInfo' ])
   },
 }
 </script>

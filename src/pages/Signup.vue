@@ -26,7 +26,7 @@ export default {
         })
         .catch(err => {
           // 회원가입이 실패했다면 서버로부터 전송받은 메시지를 보여준다.
-          alert(err.response.data.msg)
+          alert("사인업 페이지 에러" + err.response.data.msg)
         })
     }
   }

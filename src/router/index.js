@@ -5,10 +5,12 @@ import Signup from '@/pages/Signup'
 import Signin from '@/pages/Signin'
 import AppHeader from '@/components/AppHeader'
 import Boards from '@/pages/Boards'
+import Memos from '@/pages/Memos'
+import MemoForm from '@/pages/MemoForm'
+import MemoView from '@/pages/MemoView'
 
 Vue.use(Router)
-
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -29,23 +31,76 @@ export default new Router({
     },
     {
        path: '/',
+       alias: '/boards',
        name: 'home',
       components: {
           header: AppHeader,
           boards: Boards
       },
-      beforeEnter (to, from, next){
-        const {isAuthorized} = store.getters
-        if (!isAuthorized){
-          alert('로그인이 필요합니다!')
-          //로그인이 안되있으면 로그인 페이지로 이동시킨다.
-          next({ name: 'Signin'})
-        }
-        next()
-      }
     },
-
-
+    {
+      path: '/boards/personal/:boardId/momos',
+      name: 'MemoLists',
+      components: {
+         header: AppHeader,
+         boards: Boards,
+         Memos: Memos
+      },
+      props: {
+       Memos: true
+      },
+   },
+   {
+      path: '/boards/personal/:boardId/momos/form',
+      name: 'MemoForm',
+      components: {
+        header: AppHeader,
+        boards: Boards,
+        Memos: MemoForm
+      },
+      props: {
+        Memos: true
+      },
+    },
+    {
+      path: '/boards/personal/:boardId/momos/:memoId',
+      name: 'MemoView',
+      components: {
+        header: AppHeader,
+        boards: Boards,
+        Memos: MemoView
+      },
+      props: {
+        Memos: true
+      },
+    },
 
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const {isAuthorized} = store.getters
+  
+  if(to.path==='/signin'){
+    if(isAuthorized){
+      next({ name: 'home'})
+    }
+    else{ next() }
+  }
+
+  
+  if(to.path==='/signup'){
+       next()
+  }
+  
+
+  if (!isAuthorized){
+        alert('로그인이 필요합니다!')
+          //로그인이 안되있으면 로그인 페이지로 이동시킨다.
+        next({ name: 'Signin'})
+        }    
+  next()
+})
+
+
+export default router;

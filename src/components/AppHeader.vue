@@ -1,14 +1,10 @@
 <template>
-  <b-navbar toggleable="lg" type="light" variant="white">
+  <b-navbar id="headerMemo" type="light" variant="white" sticky>
     <b-navbar-brand href="#">Memo</b-navbar-brand>
 
-    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+    <!-- <b-navbar-toggle target="nav-collapse"></b-navbar-toggle> -->
 
-    <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav>
-          <b-nav-item href="#">Link</b-nav-item>
-          <b-nav-item href="#" disabled>Disabled</b-nav-item>
-        </b-navbar-nav>
+    <!-- <b-collapse id="nav-collapse" is-nav> -->
 
 
         <!-- Right aligned nav items -->
@@ -24,8 +20,8 @@
               <template #button-content>
                 <em>내정보</em>
               </template>
-              <b-dropdown-item >프로필</b-dropdown-item>
-              <b-dropdown-item @click="onClickSignout">로그아웃</b-dropdown-item>
+              <b-dropdown-item variant="secondary">프로필</b-dropdown-item>
+              <b-dropdown-item variant="secondary" @click="onClickSignout">로그아웃</b-dropdown-item>
             </b-nav-item-dropdown>
           </div>
 
@@ -40,7 +36,7 @@
           </div>
 
         </b-navbar-nav>
-    </b-collapse>
+    <!-- </b-collapse> -->
   </b-navbar>
 
 </template>
@@ -65,3 +61,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+  #headerMemo {
+    height: 75px;
+  }
+</style>
