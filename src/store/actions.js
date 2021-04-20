@@ -72,6 +72,14 @@ export default {
     const result2 = await api.get(`/boards/personal/${pboardid}?perPage=${perPage}&&currentPage=${currentPage}`)
     await commit(SET_PERSONALMEMOS, result2.data)
   },
+  async getMemoListsWithTitle ({commit}, payload){
+    await commit(DESTROY_MEMOS)
+    const {pboardid, perPage, currentPage, title} = payload;
+    const result1 = await api.get(`/boards/personal/${pboardid}/search/length?title=${title}`)
+    await commit(SET_MEMO_TOTAL_LENGTH, result1.data)
+    const result2 = await api.get(`/boards/personal/${pboardid}/search?perPage=${perPage}&&currentPage=${currentPage}&&title=${title}`)
+    await commit(SET_PERSONALMEMOS, result2.data)
+  },
   setSelectedBoardId ({commit}, boardId){
     commit(SET_SELECTEDBOARD_ID, boardId)
   },
