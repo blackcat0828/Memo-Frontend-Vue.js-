@@ -13,7 +13,8 @@ import {
   DELETE_PERSONALBOARD,
   SET_PERSONALMEMOS,
   SET_SELECTEDBOARD_ID,
-  SET_MEMO
+  SET_MEMO,
+  SET_MEMO_TOTAL_LENGTH
 } from './mutations-types'
 
 export default {
@@ -63,10 +64,13 @@ export default {
         commit(DELETE_PERSONALBOARD, pboardid)
       }
   },
-  async getMemoLists ({commit}, pboardid){
+  async getMemoLists ({commit}, payload){
     await commit(DESTROY_MEMOS)
-    const result = await api.get(`/boards/personal/${pboardid}`)
-    await commit(SET_PERSONALMEMOS, result.data)
+    const {pboardid, perPage, currentPage} = payload;
+    const result1 = await api.get(`/boards/personal/${pboardid}/length`)
+    await commit(SET_MEMO_TOTAL_LENGTH, result1.data)
+    const result2 = await api.get(`/boards/personal/${pboardid}?perPage=${perPage}&&currentPage=${currentPage}`)
+    await commit(SET_PERSONALMEMOS, result2.data)
   },
   setSelectedBoardId ({commit}, boardId){
     commit(SET_SELECTEDBOARD_ID, boardId)

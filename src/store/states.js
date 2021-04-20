@@ -1,6 +1,7 @@
 export default {
   boards: [],
   personalBoards:[],
+  personalBoardMemoTotalLength:null,
   teamBoards:[],
   memos: [],
   memo: null,

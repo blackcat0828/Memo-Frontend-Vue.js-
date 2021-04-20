@@ -12,7 +12,8 @@ import {
   DELETE_PERSONALBOARD,
   SET_PERSONALMEMOS,
   SET_SELECTEDBOARD_ID,
-  SET_MEMO
+  SET_MEMO,
+  SET_MEMO_TOTAL_LENGTH
 
 } from './mutations-types'
 import api from '@/api'
@@ -59,7 +60,7 @@ export default {
     //객체 내부에 key 중복선언시 나중에 선언한 key가 기존 key값을 덮어씀
     state.personalBoards.splice(targetIndex, 1, {...targetBoard, title})
   },
-  [DELETE_PERSONALBOARD] (state, pboardid){ 
+  [DELETE_PERSONALBOARD] (state, pboardid){
       const targetIndex = state.personalBoards.findIndex(v => v.pboardid === pboardid);
       state.personalBoards.splice(targetIndex, 1);
   },
@@ -83,11 +84,14 @@ export default {
     }
   },
   [SET_SELECTEDBOARD_ID] (state, boardId){
-    
+
       state.selectedBoardId = boardId;
-    
+
   },
   [SET_MEMO] (state, memo){
     state.memo = memo;
+  },
+  [SET_MEMO_TOTAL_LENGTH] (state, length){
+    state.personalBoardMemoTotalLength = length;
   },
 }

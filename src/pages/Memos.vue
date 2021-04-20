@@ -19,9 +19,23 @@
     <!-- </b-collapse> -->
     </b-navbar>
 
-    <b-card-group deck>
-      <memo v-for="memo in memos" :key="memo.id" :memo="memo" :boardId="boardId"/>
-    </b-card-group>
+
+    <b-pagination
+        v-model="currentPage"
+        :total-rows="rows"
+        :per-page="perPage"
+        align="center"
+        @page-click="pageClick"
+      ></b-pagination>
+
+    <div v-if="memos[0]==null">
+      메모를 등록해 주세요.
+    </div>
+    <div v-else>
+      <b-card-group deck>
+        <memo v-for="memo in memos" :key="memo.id" :memo="memo" :boardId="boardId"/>
+      </b-card-group>
+    </div>
   </div>
 </template>
 
@@ -41,34 +55,36 @@ export default {
     return {
       personalActive: true,
       teamActive: false,
-      test: "테스트",
+      currentPage: 1,
+      rows: null,
+      perPage: 9,
     }
   },
-  created(){
-
-      this.getMemoLists(this.boardId);
+  async created(){
+      const pboardid = this.boardId;
+      const perPage = this.perPage
+      const currentPage = this.currentPage
+      await this.getMemoLists({pboardid, perPage, currentPage});
+      this.rows = this.personalBoardMemoTotalLength;
   },
   computed: {
     // isAuthorized 게터를 등록한다.
     ...mapGetters(['isAuthorized']),
-    ...mapState(['me','memos'])
+    ...mapState(['me','memos', 'personalBoardMemoTotalLength'])
   },
   methods: {
+      pageClick: function (bvEvent, page){
+
+              this.currentPage = page;
+              const currentPage = page;
+              const perPage = this.perPage;
+              const pboardid = this.boardId;
+              this.getMemoLists({pboardid, perPage, currentPage});
+			},
     ...mapActions([ 'getMemoLists' ])
   },
   components: { Memo }
 }
 </script>
 <style scoped>
-
-  /* .footer{
-    position : fixed;
-    bottom : 0;
-    height: 100px;
-  } */
-
-   ul {
-    list-style: none;
-    padding-left: 0px;
-  }
 </style>

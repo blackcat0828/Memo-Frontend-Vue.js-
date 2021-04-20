@@ -80,25 +80,30 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const {isAuthorized} = store.getters
-  
+
   if(to.path==='/signin'){
     if(isAuthorized){
       next({ name: 'home'})
+      return
     }
-    else{ next() }
+    else{
+      next()
+      return
+    }
   }
 
-  
+
   if(to.path==='/signup'){
        next()
+       return
   }
-  
+
 
   if (!isAuthorized){
         alert('로그인이 필요합니다!')
           //로그인이 안되있으면 로그인 페이지로 이동시킨다.
         next({ name: 'Signin'})
-        }    
+        }
   next()
 })
 
