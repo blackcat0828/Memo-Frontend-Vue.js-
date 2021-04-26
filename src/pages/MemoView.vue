@@ -3,33 +3,38 @@
     <b-form @submit.prevent="submit" novalidate>
         <b-form-group
             id="title-group"
+            label-size="lg"
             label="제목:"
             label-for="title"
         >
 
-            <b-form-input type="text" v-model="title" id="title"
-                :disabled=!isUpdating>
+            <b-form-input type="text" v-model="title" id="title" style="background-color: whitesmoke;"
+                :plaintext=!isUpdating>
             </b-form-input>
         </b-form-group>
 
         <b-form-group
             id="contents-group"
+            label-size="lg"
             label="내용:"
             label-for="contents"
         >
 
             <b-form-textarea
+            
             id="contents"
             v-model="contents"
-            :disabled=!isUpdating
+            :plaintext=!isUpdating
             rows="6"
-            max-rows="12"
+            style="background-color: whitesmoke;"
             ></b-form-textarea>
         </b-form-group>
 
         <div v-if=!isUpdating>
-            <b-button @click.prevent="onUpdateForm" variant="outline-primary">수정</b-button>
-            <b-button @click="onDelete"  variant="outline-primary">삭제</b-button>
+            <div>
+                <b-button @click.prevent="onUpdateForm" variant="outline-primary">수정</b-button>
+                <b-button @click="onDelete"  variant="outline-primary">삭제</b-button>
+            </div>
         </div>
         <div v-else>
             <b-button type="submit" variant="outline-primary">수정 완료</b-button>
@@ -72,8 +77,10 @@ export default {
      
   },
   computed: {
- 
-    // isAuthorized 게터를 등록한다.
+    haveAuthority(){
+        //생성자이거나 메모장의 owner 혹은 ADMIN만 수정, 삭제 가능
+        return this.me.email === this.memo.creator || this.me.authList
+    },
     ...mapGetters(['isAuthorized']),
     ...mapState(['me','memo'])
   },

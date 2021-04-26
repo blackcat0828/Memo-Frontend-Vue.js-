@@ -20,7 +20,7 @@
               <template #button-content>
                 <em>내정보</em>
               </template>
-              <b-dropdown-item variant="secondary">프로필</b-dropdown-item>
+              <!-- <b-dropdown-item variant="secondary">프로필</b-dropdown-item> -->
               <b-dropdown-item variant="secondary" @click="onClickSignout">로그아웃</b-dropdown-item>
             </b-nav-item-dropdown>
           </div>

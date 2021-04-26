@@ -29,6 +29,7 @@
 
 
       <b-button type="submit" variant="outline-primary">등록</b-button>
+      <b-button @click="back" variant="outline-primary">목록</b-button>
 
   </b-form>
   </div>
@@ -61,15 +62,19 @@ export default {
     async submit () {
       const { title, contents } = this
       const pboardid = this.boardId;
+      const creator = this.me.email;
       if (!title || !contents){
         alert('모든 항목을 입력해주세요.');
         return
       }
-      await this.addPersonalMemo({title, contents, pboardid})
+      await this.addPersonalMemo({title, contents, creator, pboardid})
       this.$router.push({
             name: 'MemoLists',
             params: { boardId: pboardid.toString()}
       })
+    },
+    back(){
+        this.$router.go(-1)
     },
     ...mapActions([ 'addPersonalMemo' ])
   },

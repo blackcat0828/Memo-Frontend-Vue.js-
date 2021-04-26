@@ -6,6 +6,7 @@ import {
   DESTROY_ACCESS_TOKEN,
   DESTROY_MY_INFO,
   SET_PERSONALBOARD_INFO,
+  SET_TEAMBOARD_INFO,
   DESTROY_PERSONALBOARDS,
   DESTROY_MEMOS,
   ADD_PERSONALBOARD,
@@ -14,7 +15,9 @@ import {
   SET_PERSONALMEMOS,
   SET_SELECTEDBOARD_ID,
   SET_MEMO,
-  SET_MEMO_TOTAL_LENGTH
+  SET_MEMO_TOTAL_LENGTH,
+  DELETE_BOARD_MEMBER,
+  ADD_BOARD_MEMBER
 } from './mutations-types'
 
 export default {
@@ -27,6 +30,8 @@ export default {
     await commit(SET_MY_INFO, myInfo.data)
     const personalBoard = await api.get(`/boards/personal?email=${myInfo.data.email}`)
     await commit(SET_PERSONALBOARD_INFO, personalBoard.data)
+    const teamBoard = await api.get(`/boards/member?email=${myInfo.data.email}`)
+    await commit(SET_TEAMBOARD_INFO, teamBoard.data)
   },
   async signinByToken ({commit}, token){
     // 1. 토큰을 스토어에 커밋한다.
@@ -36,6 +41,8 @@ export default {
     await commit(SET_MY_INFO, myInfo.data)
     const personalBoard = await api.get(`/boards/personal?email=${myInfo.data.email}`)
     await commit(SET_PERSONALBOARD_INFO, personalBoard.data)
+    const teamBoard = await api.get(`/boards/member?email=${myInfo.data.email}`)
+    await commit(SET_TEAMBOARD_INFO, teamBoard.data)
   },
   signout ({commit}){
     commit(DESTROY_MY_INFO)
@@ -77,15 +84,15 @@ export default {
     const {pboardid, perPage, currentPage, title} = payload;
     const result1 = await api.get(`/boards/personal/${pboardid}/search/length?title=${title}`)
     await commit(SET_MEMO_TOTAL_LENGTH, result1.data)
-    const result2 = await api.get(`/boards/personal/${pboardid}/search?perPage=${perPage}&&currentPage=${currentPage}&&title=${title}`)
+    const result2 = await api.get(`/boards/personal/${pboardid}/search?title=${title}&&perPage=${perPage}&&currentPage=${currentPage}`)
     await commit(SET_PERSONALMEMOS, result2.data)
   },
   setSelectedBoardId ({commit}, boardId){
     commit(SET_SELECTEDBOARD_ID, boardId)
   },
   async addPersonalMemo({commit}, payload){
-    const{title, contents, pboardid} = payload
-    await api.post(`/boards/personal/${pboardid}/memos`, {title, contents})
+    const{title, contents, creator, pboardid} = payload
+    await api.post(`/boards/personal/${pboardid}/memos`, {title, contents, creator})
 
   },
   setMemo ({commit}, memoId){
@@ -103,6 +110,20 @@ export default {
   async deletePersonalMemo({commit}, payload){
     const {pboardid, memoId} = payload
     const result = await api.delete(`/boards/personal/${pboardid}/memos/${memoId}`)
-},
+  },
+  async deleteBoardMemberAction({commit}, payload){
+    const {pboardid, boardMember} = payload
+    const result = await api.delete(`/boards/personal/${pboardid}/member?boardMember=${boardMember}`)
+    if(result.status === 200){
+      await commit(DELETE_BOARD_MEMBER, payload) 
+    }
+  },
+  async addBoardMember({commit}, payload){
+    const{pboardid, boardMember} = payload
+    const result = await api.post(`/boards/personal/${pboardid}/member`, {boardMember})
+    if(result.status === 201){
+      await commit(ADD_BOARD_MEMBER, payload)
+    }
+  },
 
 }

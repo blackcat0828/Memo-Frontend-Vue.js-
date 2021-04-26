@@ -3,14 +3,14 @@
     <div>
       <div v-if="personalActive">
         <b-nav tabs fill >
-          <b-nav-item active><button id="memoTap" @click="onPersonalBoard">내 메모</button></b-nav-item>
-          <b-nav-item><button id="memoTap" @click="onTeamBoard">팀 메모</button></b-nav-item>
+          <b-nav-item active><button id="memoTap" @click="onPersonalBoard">내 메모장</button></b-nav-item>
+          <b-nav-item><button id="memoTap" @click="onTeamBoard">팀 메모장</button></b-nav-item>
         </b-nav>
       </div>
       <div v-else>
-        <b-nav tabs fill id="tab">
-          <b-nav-item><button id="memoTap" @click="onPersonalBoard">내 메모</button></b-nav-item>
-          <b-nav-item active><button id="memoTap" @click="onTeamBoard">팀 메모</button></b-nav-item>
+        <b-nav tabs fill >
+          <b-nav-item><button id="memoTap" @click="onPersonalBoard">내 메모장</button></b-nav-item>
+          <b-nav-item active><button id="memoTap" @click="onTeamBoard">팀 메모장</button></b-nav-item>
         </b-nav>
       </div>
     </div>
@@ -22,6 +22,8 @@
                 :selectedBoardId="selectedBoardId"
                 @updateBoard="updateBoard"
                 @deleteBoard="deleteBoard"
+                @deleteBoardMember="deleteBoardMember"
+                @addBoardMember="addBoardMember"
                 @setSelectedBoardId="setSelectedBoardId"
               />
             </ul>
@@ -29,25 +31,27 @@
           <div v-if="addPersonalBoardForm">  
               <b-form-input type="text" ref="content" 
               @blur="handleBlur"
-              @keydown.enter="onPersonalSubmit"
+              @keydown.enter="onAddPersonalSubmit"
               placeholder="제목 입력후 Enter"></b-form-input>
           </div>
 
         
           <div id="addButtonArea">
-            <button id="addFormButton" @click="onAddPersonalBoard">메모장 <b-icon icon="plus-square" aria-hidden="true"></b-icon></button>
+            <button id="addFormButton" @click="onAddPersonalBoardForm">메모장 <b-icon icon="plus-square" aria-hidden="true"></b-icon></button>
           </div>
       </div>
 
 
       <div v-else>
           <div id="teamBoardLists">
-          팀 보드 리스트 출력
+            <ul>
+              <teamBoard v-for="board in teamBoards" :key="board.pboardid" :board="board"
+                :selectedBoardId="selectedBoardId"
+                @deleteBoardMember="deleteBoardMember"
+                @setSelectedBoardId="setSelectedBoardId"
+              />
+            </ul>
           </div>
-            <div id="addButtonArea">
-              <button id="addFormButton" @click="onAddTeamBoard">메모장 <b-icon icon="plus-square" aria-hidden="true"></b-icon></button>
-            </div>
-          </b-navbar>
       </div>
     </div>
   </div>
@@ -55,14 +59,14 @@
 
 <script>
 import {mapGetters, mapState, mapActions} from 'vuex'
-import personalBoard from '@/components/personalBoard'
+import personalBoard from '@/components/PersonalBoard'
+import teamBoard from '@/components/TeamBoard'
 export default {
   name: 'Boards',
   data () {
     return {
       personalActive: true,
       teamActive: false,
-      test: "테스트",
       addPersonalBoardForm: false,
       addTeamBoardForm: false,
       personalBoardTitle: '',
@@ -82,20 +86,20 @@ export default {
       this.personalActive = false;
       this.teamActive = true;
     },
-    onAddPersonalBoard(){
+    onAddPersonalBoardForm(){
         this.addPersonalBoardForm = true;
         this.$nextTick(()=>{
             this.$refs.content.focus();
         });
     },
-    onPersonalSubmit(e){
+    onAddPersonalSubmit(e){
         const owner = this.me.email
         const title = e.target.value.trim();
-      
+        const memberList = [];
         if(title.length <= 0){
                 return false;
           }
-        this.addPersonalBoard({title, owner})
+        this.addPersonalBoard({title, owner, memberList})
 
         // 추가 완료 후, 인풋에서 포커스를 제거한다.
         this.$refs.content.blur();
@@ -106,18 +110,21 @@ export default {
     handleBlur(){
           this.addPersonalBoardForm = false;
     },
-    onAddTeamBoard(){
-      
-    },
     deleteBoard(pboardid){
       this.deleteBoardAction(pboardid);
+    },
+    deleteBoardMember(payload){
+      this.deleteBoardMemberAction(payload)
+    },
+    addBoardMember(payload){
+      this.addBoardMember(payload);
     },
     setSelectedBoardId(boardid){
       this.setSelectedBoardId(boardid);
     },
-    ...mapActions([ 'addPersonalBoard', 'updateBoardTitle', 'deleteBoardAction', 'setSelectedBoardId' ])
+    ...mapActions([ 'addPersonalBoard', 'updateBoardTitle', 'deleteBoardAction', 'setSelectedBoardId', 'deleteBoardMemberAction','addBoardMember' ])
   },
-  components: { personalBoard }
+  components: { personalBoard, teamBoard }
 }
 </script>
 <style scoped>
@@ -135,12 +142,6 @@ export default {
     width: 100%
   }
 
-  /* .footer{
-    position : fixed;
-    bottom : 0;
-    height: 100px;
-  } */
-
    ul {
     list-style: none;
     padding-left: 0px;
@@ -151,6 +152,7 @@ export default {
     background-color: whitesmoke;
   }
   #sidebar {
+    min-height: 765px;
     max-height: 765px;
     overflow-y: auto;
     overflow-x: hidden;

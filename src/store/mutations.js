@@ -5,6 +5,7 @@ import {
   DESTROY_ACCESS_TOKEN,
   DESTROY_MY_INFO,
   SET_PERSONALBOARD_INFO,
+  SET_TEAMBOARD_INFO,
   DESTROY_PERSONALBOARDS,
   DESTROY_MEMOS,
   ADD_PERSONALBOARD,
@@ -13,8 +14,9 @@ import {
   SET_PERSONALMEMOS,
   SET_SELECTEDBOARD_ID,
   SET_MEMO,
-  SET_MEMO_TOTAL_LENGTH
-
+  SET_MEMO_TOTAL_LENGTH,
+  DELETE_BOARD_MEMBER,
+  ADD_BOARD_MEMBER
 } from './mutations-types'
 import api from '@/api'
 import Cookies from 'js-cookie'
@@ -45,6 +47,11 @@ export default {
   [SET_PERSONALBOARD_INFO] (state, personalBoardInfo){
     if(personalBoardInfo){
       state.personalBoards = personalBoardInfo
+    }
+  },
+  [SET_TEAMBOARD_INFO] (state, teamBoardInfo){
+    if(teamBoardInfo){
+      state.teamBoards = teamBoardInfo
     }
   },
   [ADD_PERSONALBOARD] (state, personalBoard){
@@ -93,5 +100,28 @@ export default {
   },
   [SET_MEMO_TOTAL_LENGTH] (state, length){
     state.personalBoardMemoTotalLength = length;
+  },
+  [DELETE_BOARD_MEMBER] (state, payload){
+    const {pboardid, boardMember, boardType} = payload
+    if(boardType === 'team'){
+      const targetBoardIndex = state.teamBoards.findIndex(v => v.pboardid === pboardid);
+      // const targetBoard = state.teamBoards[targetBoardIndex];
+      // const targetMemberIndex = targetBoard.memberList.findIndex(v => v.boardMember === boardMember)
+
+      state.teamBoards.splice(targetBoardIndex, 1);
+
+    }else{
+      const targetBoardIndex = state.personalBoards.findIndex(v => v.pboardid === pboardid);
+      const targetBoard = state.personalBoards[targetBoardIndex];
+      const targetMemberIndex = targetBoard.memberList.findIndex(v => v.boardMember === boardMember)
+
+      state.personalBoards[targetBoardIndex].memberList.splice(targetMemberIndex, 1);
+    }
+  },
+  [ADD_BOARD_MEMBER] (state, payload){
+    const{pboardid, boardMember} = payload  
+    const targetBoardIndex = state.personalBoards.findIndex(v => v.pboardid === pboardid);
+      
+    state.personalBoards[targetBoardIndex].memberList.push(payload);
   },
 }
