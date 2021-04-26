@@ -10,5 +10,6 @@ export default {
   //해당 토큰으로 자원에 접근하지 못한다. 지금은 데모이기 때문에 유효 시간을 정해 두지 않는다.
   accessToken: '',
   me: null,
+  owner: null,
   selectedBoardId: null,
 }

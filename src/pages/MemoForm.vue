@@ -29,7 +29,7 @@
 
 
       <b-button type="submit" variant="outline-primary">등록</b-button>
-      <b-button @click="back" variant="outline-primary">목록</b-button>
+      <b-button @click="back" variant="outline-primary">목록으로</b-button>
 
   </b-form>
   </div>

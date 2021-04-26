@@ -8,7 +8,10 @@
                 @click.native="isSelected"
                 
                 :class="{ 'text-danger font-weight-bold': isSelectedBoard}"
-                :to="{ name: 'MemoLists', params:{ boardId: board.pboardid.toString(), owner: board.owner}}">
+                :to="{ 
+                  name: 'MemoLists', 
+                  params:{ boardId: board.pboardid.toString()}
+                }">
                 {{board.title}}
           </router-link>
           
@@ -156,6 +159,7 @@ export default {
           this.$emit('deleteBoard', pboardid);
     },
     isSelected(){
+      this.$emit('setOwner', this.board.owner)
       this.$emit('setSelectedBoardId', this.board.pboardid)
     },
     checkFormValidity() {

@@ -22,7 +22,9 @@
 
             <template #footer>
               <router-link style="font-size: 14px;" 
-                :to="{ name: 'MemoView', params:{ memoId: memo.id.toString(), boardId: boardId.toString()}}">
+                :to="{ name: 'MemoView', 
+                params:{ memoId: memo.id.toString(), boardId: boardId.toString()}
+                }">
                 상세보기<b-icon icon="arrow-right-square" aria-hidden="true"></b-icon>
               </router-link>
             </template>
@@ -52,7 +54,7 @@ export default {
     boardId: {
       type: String,
       required: true
-    }
+    },
   },
   data () {
       return {
