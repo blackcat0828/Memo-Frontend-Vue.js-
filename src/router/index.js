@@ -14,7 +14,7 @@ const router = new Router({
   mode: 'history',
   routes: [
     {
-      path: '/signup',
+      path: '/auth/signup',
       name: 'Signup',
       components: {
         header: AppHeader,
@@ -22,7 +22,7 @@ const router = new Router({
       }
     },
     {
-      path: '/signin',
+      path: '/auth/signin',
       name: 'Signin',
       components: {
         header: AppHeader,
@@ -81,7 +81,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   const {isAuthorized} = store.getters
 
-  if(to.path==='/signin'){
+  if(to.path==='/auth/signin'){
     if(isAuthorized){
       next({ name: 'home'})
       return
@@ -93,7 +93,7 @@ router.beforeEach((to, from, next) => {
   }
 
 
-  if(to.path==='/signup'){
+  if(to.path==='/auth/signup'){
        next()
        return
   }

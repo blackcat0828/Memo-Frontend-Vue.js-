@@ -68,6 +68,7 @@ export default {
   async deleteBoardAction({commit}, pboardid){
       const result = await api.delete(`/boards/personal/${pboardid}`)
       if(result.status === 200){
+        commit(DESTROY_MEMOS)
         commit(DELETE_PERSONALBOARD, pboardid)
       }
   },

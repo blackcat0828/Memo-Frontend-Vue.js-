@@ -17,6 +17,7 @@
     <div id="sidebar">
       <div v-if="personalActive">
           <div id="personalBoardLists">
+            <br>
             <ul>
               <personalBoard v-for="board in personalBoards" :key="board.pboardid" :board="board"
                 :selectedBoardId="selectedBoardId"
@@ -44,6 +45,7 @@
 
       <div v-else>
           <div id="teamBoardLists">
+            <br>
             <ul>
               <teamBoard v-for="board in teamBoards" :key="board.pboardid" :board="board"
                 :selectedBoardId="selectedBoardId"
