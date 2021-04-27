@@ -23,8 +23,10 @@ import {
 export default {
   async signin ({ commit }, payload){
     const {email, password} = payload
+    //토큰 생성 요청
     const result = await api.post(`/auth/signin?email=${email}&&password=${password}`)
     const {Authorization} = result.data
+    //토큰 저장후 토큰을 이용하여 다시 user info를 받아오는 요청
     await commit(SET_ACCESS_TOKEN, Authorization)
     const myInfo = await api.get('/users/me')
     await commit(SET_MY_INFO, myInfo.data)
